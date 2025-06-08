@@ -1,7 +1,7 @@
 ---
 - name: Basic Server Setup
   hosts: local
-  become: yes # Use privilege escalation (sudo)
+  become: yes
   tasks:
     - name: Update apt cache
       apt:
