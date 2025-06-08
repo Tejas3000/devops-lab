@@ -1,16 +1,21 @@
 ---
-- name: Deploy Maven Artifact (Jenkins User Accessible)
+- name: Deploy Maven Artifact (macOS - Jenkins User Accessible)
   hosts: local
+  connection: local
+  vars:
+    source_artifact: "/Users/your-username/.jenkins/workspace/HelloMaven-CI/target/maven-junit5-example-1.0-SNAPSHOT.jar"
+    destination_directory: "/Users/your-username/.jenkins/deployment"
+    destination_artifact: "HelloMaven.jar"
 
   tasks:
     - name: Ensure deployment directory exists
       ansible.builtin.file:
-        path: "/var/lib/jenkins/deployment"
+        path: "{{ destination_directory }}"
         state: directory
         mode: "0755"
 
     - name: Copy the artifact to the deployment directory
       ansible.builtin.copy:
-        src: "/var/lib/jenkins/workspace/HelloMaven-CI/target/maven-junit5-example-1.0-SNAPSHOT.jar"
-        dest: "/var/lib/jenkins/deployment/HelloMaven.jar"
-        remote_src: yes
+        src: "{{ source_artifact }}"
+        dest: "{{ destination_directory }}/{{ destination_artifact }}"
+        remote_src: no
